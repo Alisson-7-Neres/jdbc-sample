@@ -29,6 +29,8 @@ public class Main {
 		employeeDao.insert(employee);
 		System.out.println(employee);
 		 */
+		
+		employeeDao.findAll();
 	}
 
 }

@@ -2,6 +2,7 @@ package com.dio.entity;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -13,15 +14,15 @@ public class EmployeeDAO {
 	
 	public void insert(final EmployeeEntity employeeEntity) {
 		try {
-			Connection connection = ConnectionUtil.getConnection();
-			var statement = connection.createStatement();
+			Connection connection = ConnectionUtil.getConnection(); // Criando conexão
+			Statement statement = connection.createStatement();
 			
 			String sql = 
 			"INSERT INTO employees (name,salary, birthday) VALUES "
 			+ "('"+ employeeEntity.getName() +"' , " 
 					+ employeeEntity.getSalary().toString() +" , '"
 					+formatOffsetDateTime(employeeEntity.getBithday())+"');";
-			statement.executeUpdate(sql);
+			statement.executeUpdate(sql); // Executa a query
 			if (statement instanceof StatementImpl impl)
 				employeeEntity.setId(impl.getLastInsertID());
 		} catch (SQLException ex) {

@@ -67,6 +67,26 @@ public class EmployeeDAO {
 	}
 
 	public EmployeeEntity findById(final long id) {
+		EmployeeEntity entity = new EmployeeEntity();
+		try {
+			Connection connection = ConnectionUtil.getConnection();
+			Statement statement = connection.createStatement();
+			
+			statement.executeQuery("SELECT*FROM employees WHERE id = " + id);
+			ResultSet resultSet = statement.getResultSet();
+			
+			if (resultSet.next()) { // Como só vai exibir só uma usuário, usa-se a condicional ao inves do laço de repetição
+			entity.setId(resultSet.getLong("id"));
+			entity.setName(resultSet.getString("name"));
+			entity.setSalary(resultSet.getBigDecimal("salary"));
+			Instant birthdayInstant = resultSet.getTimestamp("birthday").toInstant();
+			entity.setBithday(OffsetDateTime.ofInstant(birthdayInstant, ZoneOffset.UTC));
+			System.out.println(entity);
+			} else
+				System.err.println("ID não encontrado!");
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
 		return null;
 	}
 	

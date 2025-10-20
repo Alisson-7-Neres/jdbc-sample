@@ -30,7 +30,9 @@ public class Main {
 		System.out.println(employee);
 		 */
 		
-		employeeDao.findAll();
+		// employeeDao.findAll();
+		
+		employeeDao.findById(2);
 	}
 
 }

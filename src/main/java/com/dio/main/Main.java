@@ -34,6 +34,7 @@ public class Main {
 		
 		//employeeDao.findById(2);
 		
+		/*
 		var employee = new EmployeeEntity();
 		employee.setId(1);
 		employee.setName("Alisson Neres Ribeiro");
@@ -41,7 +42,9 @@ public class Main {
 		employee.setBithday(OffsetDateTime.now().minusYears(32));
 		System.out.println(employee);
 		employeeDao.update(employee);
+		*/
 		
+		employeeDao.delete(5);
 	}
 
 }

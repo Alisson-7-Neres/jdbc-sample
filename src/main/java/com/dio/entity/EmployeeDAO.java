@@ -53,6 +53,17 @@ public class EmployeeDAO {
 	}
 
 	public void delete(final long id) {		
+		try {
+		Connection connection = ConnectionUtil.getConnection();
+		Statement statement = connection.createStatement();
+		
+		String sql = 
+		"DELETE FROM employees WHERE id = " + id;
+		statement.execute(sql);
+		findAll();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	public List<EmployeeEntity> findAll() {

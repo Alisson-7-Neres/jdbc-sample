@@ -32,7 +32,16 @@ public class Main {
 		
 		// employeeDao.findAll();
 		
-		employeeDao.findById(2);
+		//employeeDao.findById(2);
+		
+		var employee = new EmployeeEntity();
+		employee.setId(1);
+		employee.setName("Alisson Neres Ribeiro");
+		employee.setSalary(new BigDecimal("2500"));
+		employee.setBithday(OffsetDateTime.now().minusYears(32));
+		System.out.println(employee);
+		employeeDao.update(employee);
+		
 	}
 
 }

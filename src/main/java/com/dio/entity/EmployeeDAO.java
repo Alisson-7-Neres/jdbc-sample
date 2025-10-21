@@ -35,9 +35,24 @@ public class EmployeeDAO {
 	}
 
 	public void update(final EmployeeEntity employeeEntity) {
+		try {
+			Connection connection = ConnectionUtil.getConnection();
+			Statement statement = connection.createStatement();
+			
+			String sql =
+			"UPDATE employees SET "
+			+ "name = '" + employeeEntity.getName() + "'"
+			+ ", salary = " + employeeEntity.getSalary()
+			+ ", birthday = '" + formatOffsetDateTime(employeeEntity.getBithday()) + "' "
+			+ "WHERE id = " + employeeEntity.getId();
+			statement.executeUpdate(sql);
+
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+			}
 	}
 
-	public void delete(final long id) {
+	public void delete(final long id) {		
 	}
 
 	public List<EmployeeEntity> findAll() {

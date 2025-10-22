@@ -5,12 +5,14 @@ import java.time.OffsetDateTime;
 
 import org.flywaydb.core.Flyway;
 
+import com.dio.entity.EmployeeAuditDAO;
 import com.dio.entity.EmployeeDAO;
 import com.dio.entity.EmployeeEntity;
 
 public class Main {
 	
 	private final static EmployeeDAO employeeDao = new EmployeeDAO();
+	private final static EmployeeAuditDAO employeeAuditDAO =  new EmployeeAuditDAO();
 
 	public static void main(String[] args) {
 		Flyway flyway = Flyway.configure()
@@ -45,6 +47,8 @@ public class Main {
 		*/
 		
 		// employeeDao.delete(5);
+		
+		//employeeAuditDAO.findAll().forEach(System.out::println);
 	}
 
 }

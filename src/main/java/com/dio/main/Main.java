@@ -44,7 +44,7 @@ public class Main {
 		employeeDao.update(employee);
 		*/
 		
-		employeeDao.delete(5);
+		// employeeDao.delete(5);
 	}
 
 }

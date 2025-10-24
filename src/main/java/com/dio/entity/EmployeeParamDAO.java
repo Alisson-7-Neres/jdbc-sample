@@ -52,6 +52,31 @@ public class EmployeeParamDAO {
 		}
 	}
 	
+	// Metódo para inserção de vários registros
+	public void insertBatch(final List<EmployeeEntity> employeeEntity) throws SQLException {
+		Connection connection = ConnectionUtil.getConnection(); // Criando conexão
+		PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO employees (name,salary, birthday) VALUES (? , ? , ?)");
+		try {
+			connection.setAutoCommit(false);
+			// A cada 1000 registros, ele comita, evitando comitar tudo de uma vez
+			for (int countRegister = 1; countRegister < employeeEntity.size(); countRegister++) {
+				preparedStatement.setString(1, employeeEntity.get(countRegister).getName());
+				preparedStatement.setBigDecimal(2, employeeEntity.get(countRegister).getSalary());
+				preparedStatement.setTimestamp(3, Timestamp.valueOf(employeeEntity.get(countRegister)
+						.getBithday().atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()));
+				preparedStatement.addBatch();
+				if (countRegister % 1000 == 0 || countRegister == employeeEntity.size() -1) {
+					preparedStatement.executeBatch();
+				}
+			}
+			preparedStatement.executeBatch();
+			connection.commit();
+		} catch (SQLException ex) {
+			connection.rollback(); // Caso a operação falhe
+			ex.printStackTrace();
+		}
+	}
+	
 	public void update(final EmployeeEntity employeeEntity) {
 		try {
 			Connection connection = ConnectionUtil.getConnection();

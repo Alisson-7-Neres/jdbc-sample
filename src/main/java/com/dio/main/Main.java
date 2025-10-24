@@ -1,7 +1,14 @@
 package com.dio.main;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Stream;
 
 import org.flywaydb.core.Flyway;
 
@@ -10,12 +17,16 @@ import com.dio.entity.EmployeeDAO;
 import com.dio.entity.EmployeeEntity;
 import com.dio.entity.EmployeeParamDAO;
 
+import net.datafaker.Faker;
+
 public class Main {
 	
 	private final static EmployeeParamDAO employeeParamDao = new EmployeeParamDAO();
 	private final static EmployeeAuditDAO employeeAuditDAO =  new EmployeeAuditDAO();
+	private static final EmployeeDAO employeeDao = new EmployeeDAO();
+	private final static Faker faker = new Faker(Locale.of("pt", "BR"));
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		Flyway flyway = Flyway.configure()
 				.dataSource("jdbc:mysql://localhost/jdbc_sample", "root", "admin")
 				.locations("classpath:db/migration") // Caso não ache o arquivo de migração
@@ -60,7 +71,6 @@ public class Main {
 		employeeAndre.setBithday(OffsetDateTime.now().minusYears(18));
 		System.out.println(employeeAndre);
 		employeeParamDao.insert(employeeAndre);
-		*/
 		
 		var employeeAndrea = new EmployeeEntity();
 		employeeAndrea.setName("Andrea Freire");
@@ -69,6 +79,7 @@ public class Main {
 		System.out.println(employeeAndrea);
 		employeeParamDao.insertWithProcedure(employeeAndrea);
 		
+		 */
 		
 		//employeeParamDao.findAll();
 		
@@ -77,6 +88,18 @@ public class Main {
 		// employeeParamDao.delete(2);
 		
 		//employeeAuditDAO.findAll().forEach(System.out::println);
+		
+		// Usando datafaker para gerar registros
+		List<EmployeeEntity> entities = Stream.generate(() -> {
+			EmployeeEntity employeeEntity = new EmployeeEntity();
+			employeeEntity.setName(faker.name().fullName());
+			employeeEntity.setSalary(new BigDecimal(faker.number().digits(4)));
+			employeeEntity.setBithday
+			(OffsetDateTime.of(LocalDate.now().minusYears(faker.number().numberBetween(40, 20)), LocalTime.MIN,ZoneOffset.UTC));
+			return employeeEntity;
+		}).limit(4000).toList();
+		
+		employeeParamDao.insertBatch(entities);
 	}
 
 }
